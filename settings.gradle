@@ -1,1 +1,1 @@
-include ':app', ':EasyLocationLibrary'
+include ':app', ':droidLocationLibrary'
