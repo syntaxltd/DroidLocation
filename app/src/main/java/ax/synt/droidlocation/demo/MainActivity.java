@@ -4,20 +4,23 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
 
-import ax.synt.droidlocation.EasyLocationAppCompatActivity;
-import ax.synt.droidlocation.EasyLocationRequest;
-import ax.synt.droidlocation.EasyLocationRequestBuilder;
+import ax.synt.droidlocation.DroidLocationAppCompatActivity;
+import ax.synt.droidlocation.DroidLocationRequest;
+import ax.synt.droidlocation.DroidLocationRequestBuilder;
 
 
-public class MainActivity extends EasyLocationAppCompatActivity implements View.OnClickListener {
+public class MainActivity extends DroidLocationAppCompatActivity implements View.OnClickListener {
 
     private Button requestSingleLocationButton;
     private Button requestLocationUpdatesButton;
     private Button stopLocationUpdatesButton;
+    private TextView addresstext;
+    private TextView addresstextfull;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class MainActivity extends EasyLocationAppCompatActivity implements View.
         requestSingleLocationButton = (Button) findViewById(R.id.requestSingleLocationButton);
         requestLocationUpdatesButton = (Button) findViewById(R.id.requestLocationUpdatesButton);
         stopLocationUpdatesButton = (Button) findViewById(R.id.stopLocationUpdatesButton);
+        addresstext = (TextView) findViewById(R.id.addresstext);
+        addresstextfull = (TextView) findViewById(R.id.addresstextfull);
 
         requestSingleLocationButton.setOnClickListener(this);
         requestLocationUpdatesButton.setOnClickListener(this);
@@ -54,6 +59,8 @@ public class MainActivity extends EasyLocationAppCompatActivity implements View.
     @Override
     public void onLocationReceived(Location location) {
         showToast(location.getProvider() + "," + location.getLatitude() + "," + location.getLongitude());
+        addresstext.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),false,false));
+        addresstextfull.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),true,true));
     }
 
     @Override
@@ -74,11 +81,11 @@ public class MainActivity extends EasyLocationAppCompatActivity implements View.
                         .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
                         .setInterval(5000)
                         .setFastestInterval(5000);
-                EasyLocationRequest easyLocationRequest = new EasyLocationRequestBuilder()
+                DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
                         .setLocationRequest(locationRequest)
                         .setFallBackToLastLocationTime(3000)
                         .build();
-                requestSingleLocationFix(easyLocationRequest);
+                requestSingleLocationFix(droidLocationRequest);
             }
             break;
             case R.id.requestLocationUpdatesButton: {
@@ -86,11 +93,11 @@ public class MainActivity extends EasyLocationAppCompatActivity implements View.
                         .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
                         .setInterval(5000)
                         .setFastestInterval(5000);
-                EasyLocationRequest easyLocationRequest = new EasyLocationRequestBuilder()
+                DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
                         .setLocationRequest(locationRequest)
                         .setFallBackToLastLocationTime(3000)
                         .build();
-                requestLocationUpdates(easyLocationRequest);
+                requestLocationUpdates(droidLocationRequest);
             }
             break;
             case R.id.stopLocationUpdatesButton:

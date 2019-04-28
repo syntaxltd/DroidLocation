@@ -7,48 +7,48 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 
-public abstract class EasyLocationActivity extends Activity implements EasyLocationListener {
-    private EasyLocationDelegate easyLocationDelegate;
+public abstract class DroidLocationActivity extends Activity implements DroidLocationListener {
+    private DroidLocationDelegate droidLocationDelegate;
 
     protected Location getLastKnownLocation() {
-        return easyLocationDelegate.getLastKnownLocation();
+        return droidLocationDelegate.getLastKnownLocation();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        easyLocationDelegate = new EasyLocationDelegate(this,this);
-        easyLocationDelegate.onCreate();
+        droidLocationDelegate = new DroidLocationDelegate(this,this);
+        droidLocationDelegate.onCreate();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        easyLocationDelegate.showLocationSettingDialog(requestCode);
+        droidLocationDelegate.showLocationSettingDialog(requestCode);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        easyLocationDelegate.onRequestPermissionsResult(requestCode, grantResults);
+        droidLocationDelegate.onRequestPermissionsResult(requestCode, grantResults);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        easyLocationDelegate.onDestroy();
+        droidLocationDelegate.onDestroy();
     }
 
-    protected void requestLocationUpdates(EasyLocationRequest easyLocationRequest) {
-        easyLocationDelegate.requestLocationUpdates(easyLocationRequest);
+    protected void requestLocationUpdates(DroidLocationRequest droidLocationRequest) {
+        droidLocationDelegate.requestLocationUpdates(droidLocationRequest);
     }
 
 
-    protected void requestSingleLocationFix(EasyLocationRequest easyLocationRequest) {
-        easyLocationDelegate.requestSingleLocationFix(easyLocationRequest);
+    protected void requestSingleLocationFix(DroidLocationRequest droidLocationRequest) {
+        droidLocationDelegate.requestSingleLocationFix(droidLocationRequest);
     }
 
     protected void stopLocationUpdates() {
-        easyLocationDelegate.stopLocationUpdates();
+        droidLocationDelegate.stopLocationUpdates();
     }
 }

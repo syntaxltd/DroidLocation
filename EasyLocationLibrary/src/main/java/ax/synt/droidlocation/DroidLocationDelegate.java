@@ -31,25 +31,25 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-class EasyLocationDelegate {
+class DroidLocationDelegate {
     private static final int PERMISSIONS_REQUEST = 100;
     private static final int ENABLE_LOCATION_SERVICES_REQUEST = 101;
     private static final int GOOGLE_PLAY_SERVICES_ERROR_DIALOG = 102;
 
 
     private final Activity activity;
-    private final EasyLocationListener easyLocationListener;
+    private final DroidLocationListener droidLocationListener;
     private final LocationBroadcastReceiver locationReceiver;
     private LocationManager mLocationManager;
     private int mLocationFetchMode;
     private LocationRequest mLocationRequest;
     private GoogleApiAvailability googleApiAvailability;
-    private EasyLocationRequest easyLocationRequest;
+    private DroidLocationRequest droidLocationRequest;
 
-    EasyLocationDelegate(Activity activity, EasyLocationListener easyLocationListener) {
+    DroidLocationDelegate(Activity activity, DroidLocationListener droidLocationListener) {
         this.activity = activity;
-        this.easyLocationListener = easyLocationListener;
-        locationReceiver = new LocationBroadcastReceiver(easyLocationListener);
+        this.droidLocationListener = droidLocationListener;
+        locationReceiver = new LocationBroadcastReceiver(droidLocationListener);
     }
 
 
@@ -77,13 +77,13 @@ class EasyLocationDelegate {
         activity.startService(intent);
     }
 
-    private void isProperRequest(EasyLocationRequest easyLocationRequest) {
-        if (easyLocationRequest == null)
-            throw new IllegalStateException("easyLocationRequest can't be null");
+    private void isProperRequest(DroidLocationRequest droidLocationRequest) {
+        if (droidLocationRequest == null)
+            throw new IllegalStateException("droidLocationRequest can't be null");
 
-        if (easyLocationRequest.locationRequest == null)
+        if (droidLocationRequest.locationRequest == null)
             throw new IllegalStateException("locationRequest can't be null");
-        this.easyLocationRequest = easyLocationRequest;
+        this.droidLocationRequest = droidLocationRequest;
     }
 
     private void startLocationBGService(LocationRequest locationRequest, long fallBackToLastLocationTime) {
@@ -104,10 +104,10 @@ class EasyLocationDelegate {
     }
 
     private void showPermissionRequireDialog() {
-        String title = TextUtils.isEmpty(easyLocationRequest.locationPermissionDialogTitle) ? activity.getString(R.string.location_permission_dialog_title) : easyLocationRequest.locationPermissionDialogTitle;
-        String message = TextUtils.isEmpty(easyLocationRequest.locationPermissionDialogMessage) ? activity.getString(R.string.location_permission_dialog_message) : easyLocationRequest.locationPermissionDialogMessage;
-        String negativeButtonTitle = TextUtils.isEmpty(easyLocationRequest.locationPermissionDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : easyLocationRequest.locationPermissionDialogNegativeButtonText;
-        String positiveButtonTitle = TextUtils.isEmpty(easyLocationRequest.locationPermissionDialogPositiveButtonText) ? activity.getString(android.R.string.ok) : easyLocationRequest.locationPermissionDialogPositiveButtonText;
+        String title = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogTitle) ? activity.getString(R.string.location_permission_dialog_title) : droidLocationRequest.locationPermissionDialogTitle;
+        String message = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogMessage) ? activity.getString(R.string.location_permission_dialog_message) : droidLocationRequest.locationPermissionDialogMessage;
+        String negativeButtonTitle = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : droidLocationRequest.locationPermissionDialogNegativeButtonText;
+        String positiveButtonTitle = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogPositiveButtonText) ? activity.getString(android.R.string.ok) : droidLocationRequest.locationPermissionDialogPositiveButtonText;
         new AlertDialog.Builder(activity)
                 .setCancelable(true)
                 .setTitle(title)
@@ -115,7 +115,7 @@ class EasyLocationDelegate {
                 .setNegativeButton(negativeButtonTitle, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        easyLocationListener.onLocationPermissionDenied();
+                        droidLocationListener.onLocationPermissionDenied();
                     }
                 })
                 .setPositiveButton(positiveButtonTitle, new DialogInterface.OnClickListener() {
@@ -129,10 +129,10 @@ class EasyLocationDelegate {
     @Deprecated
     // warning: Use @
     private void showLocationServicesRequireDialog() {
-        String title = TextUtils.isEmpty(easyLocationRequest.locationSettingsDialogTitle) ? activity.getString(R.string.location_services_off) : easyLocationRequest.locationSettingsDialogTitle;
-        String message = TextUtils.isEmpty(easyLocationRequest.locationSettingsDialogMessage) ? activity.getString(R.string.open_location_settings) : easyLocationRequest.locationSettingsDialogMessage;
-        String negativeButtonText = TextUtils.isEmpty(easyLocationRequest.locationSettingsDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : easyLocationRequest.locationSettingsDialogNegativeButtonText;
-        String positiveButtonText = TextUtils.isEmpty(easyLocationRequest.locationSettingsDialogPositiveButtonText) ? activity.getString(android.R.string.ok) : easyLocationRequest.locationSettingsDialogPositiveButtonText;
+        String title = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogTitle) ? activity.getString(R.string.location_services_off) : droidLocationRequest.locationSettingsDialogTitle;
+        String message = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogMessage) ? activity.getString(R.string.open_location_settings) : droidLocationRequest.locationSettingsDialogMessage;
+        String negativeButtonText = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : droidLocationRequest.locationSettingsDialogNegativeButtonText;
+        String positiveButtonText = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogPositiveButtonText) ? activity.getString(android.R.string.ok) : droidLocationRequest.locationSettingsDialogPositiveButtonText;
         new AlertDialog.Builder(activity)
                 .setCancelable(true)
                 .setTitle(title)
@@ -140,7 +140,7 @@ class EasyLocationDelegate {
                 .setNegativeButton(negativeButtonText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        easyLocationListener.onLocationProviderDisabled();
+                        droidLocationListener.onLocationProviderDisabled();
                     }
                 })
                 .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
@@ -189,9 +189,9 @@ class EasyLocationDelegate {
 
                         if (isLocationEnabled()) {
                             requestLocation(mLocationRequest, mLocationFetchMode);
-                            easyLocationListener.onLocationProviderEnabled();
+                            droidLocationListener.onLocationProviderEnabled();
                         } else
-                            easyLocationListener.onLocationProviderDisabled();
+                            droidLocationListener.onLocationProviderDisabled();
 
 
                         break;
@@ -208,7 +208,7 @@ class EasyLocationDelegate {
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        //easyLocationListener.onLocationProviderDisabled();
+                        //droidLocationListener.onLocationProviderDisabled();
 
                         // Location settings are not satisfied. However, we have no way to fix the
                         // settings so we won't show the dialog.
@@ -239,7 +239,7 @@ class EasyLocationDelegate {
             else
                 requestPermission();
         } else
-            startLocationBGService(locationRequest,easyLocationRequest.fallBackToLastLocationTime);
+            startLocationBGService(locationRequest, droidLocationRequest.fallBackToLastLocationTime);
     }
 
     private void unregisterLocationBroadcastReceiver() {
@@ -274,9 +274,9 @@ class EasyLocationDelegate {
             case ENABLE_LOCATION_SERVICES_REQUEST:
                 if (isLocationEnabled()) {
                     requestLocation(mLocationRequest, mLocationFetchMode);
-                    easyLocationListener.onLocationProviderEnabled();
+                    droidLocationListener.onLocationProviderEnabled();
                 } else
-                    easyLocationListener.onLocationProviderDisabled();
+                    droidLocationListener.onLocationProviderDisabled();
                 break;
         }
     }*/
@@ -286,9 +286,9 @@ class EasyLocationDelegate {
             case PERMISSIONS_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     requestLocation(mLocationRequest, mLocationFetchMode);
-                    easyLocationListener.onLocationPermissionGranted();
+                    droidLocationListener.onLocationPermissionGranted();
                 } else
-                    easyLocationListener.onLocationPermissionDenied();
+                    droidLocationListener.onLocationPermissionDenied();
                 break;
         }
     }
@@ -302,13 +302,13 @@ class EasyLocationDelegate {
         return PreferenceUtil.getInstance(activity).getLastKnownLocation();
     }
 
-    void requestLocationUpdates(EasyLocationRequest easyLocationRequest) {
-        isProperRequest(easyLocationRequest);
-        requestLocation(easyLocationRequest.locationRequest, AppConstants.CONTINUOUS_LOCATION_UPDATES);
+    void requestLocationUpdates(DroidLocationRequest droidLocationRequest) {
+        isProperRequest(droidLocationRequest);
+        requestLocation(droidLocationRequest.locationRequest, AppConstants.CONTINUOUS_LOCATION_UPDATES);
     }
 
-    void requestSingleLocationFix(EasyLocationRequest easyLocationRequest) {
-        isProperRequest(easyLocationRequest);
-        requestLocation(easyLocationRequest.locationRequest, AppConstants.SINGLE_FIX);
+    void requestSingleLocationFix(DroidLocationRequest droidLocationRequest) {
+        isProperRequest(droidLocationRequest);
+        requestLocation(droidLocationRequest.locationRequest, AppConstants.SINGLE_FIX);
     }
 }

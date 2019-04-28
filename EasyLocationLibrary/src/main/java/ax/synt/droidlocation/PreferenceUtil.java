@@ -36,7 +36,7 @@ class PreferenceUtil {
         }
     }
     public void saveLastKnownLocation(Location location) {
-        EasyLocation easyLocation= new EasyLocation(location);
-        mPreferences.edit().putString(LAST_KNOWN_LOCATION,easyLocation.toString()).apply();
+        DroidLocation droidLocation = new DroidLocation(location);
+        mPreferences.edit().putString(LAST_KNOWN_LOCATION, droidLocation.toString()).apply();
     }
 }

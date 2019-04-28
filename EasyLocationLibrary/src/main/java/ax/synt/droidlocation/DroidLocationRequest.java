@@ -3,7 +3,7 @@ package ax.synt.droidlocation;
 
 import com.google.android.gms.location.LocationRequest;
 
-public class EasyLocationRequest {
+public class DroidLocationRequest {
      final LocationRequest locationRequest;
      final String locationSettingsDialogTitle;
      final String locationSettingsDialogMessage;
@@ -15,7 +15,7 @@ public class EasyLocationRequest {
      final String locationPermissionDialogNegativeButtonText;
      final long fallBackToLastLocationTime;
 
-    public EasyLocationRequest(LocationRequest locationRequest, String locationSettingsDialogTitle, String locationSettingsDialogMessage, String locationSettingsDialogPositiveButtonText, String locationSettingsDialogNegativeButtonText, String locationPermissionDialogTitle, String locationPermissionDialogMessage, String locationPermissionDialogPositiveButtonText, String locationPermissionDialogNegativeButtonText, long fallBackToLastLocationTime) {
+    public DroidLocationRequest(LocationRequest locationRequest, String locationSettingsDialogTitle, String locationSettingsDialogMessage, String locationSettingsDialogPositiveButtonText, String locationSettingsDialogNegativeButtonText, String locationPermissionDialogTitle, String locationPermissionDialogMessage, String locationPermissionDialogPositiveButtonText, String locationPermissionDialogNegativeButtonText, long fallBackToLastLocationTime) {
         this.locationRequest = locationRequest;
         this.locationSettingsDialogTitle = locationSettingsDialogTitle;
         this.locationSettingsDialogMessage = locationSettingsDialogMessage;

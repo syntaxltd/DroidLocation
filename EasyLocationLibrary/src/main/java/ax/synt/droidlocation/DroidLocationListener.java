@@ -2,7 +2,7 @@ package ax.synt.droidlocation;
 
 import android.location.Location;
 
-interface EasyLocationListener {
+interface DroidLocationListener {
     void onLocationPermissionGranted();
     void onLocationPermissionDenied();
     void onLocationReceived(Location location);
