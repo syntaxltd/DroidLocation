@@ -1,4 +1,4 @@
-# EasyLocation
+# DroidLocation
 
 Getting location updates requires lots of boilerplate code in Android, You need to take care of
 - Google Play services availability Check, Update Google play Service Dialog
@@ -9,35 +9,9 @@ Getting location updates requires lots of boilerplate code in Android, You need 
 - Getting last known location is not so easy either
 - Fallback to last known location if not getting location after certain duration
 
-**EasyLocation** does all this stuff in background, so that you can concentrate on your business logic than handling all above
+**DroidLocation** does all this stuff in background, so that you can concentrate on your business logic than handling all above
 
-## Getting started
-
-In your `build.gradle`:
-
-Add the following maven{} line to your **PROJECT** build.gradle file
-
-```
-allprojects {
-		repositories {
-			...
-			maven { url "https://jitpack.io" }   // add this line
-		}
-	}
-```
-
-**com.google.android.gms:play-services-location** dependency also needs to be added like this
-
-**x.x.x** can be replaced with google play service version your app is using [versions information available here](https://developers.google.com/android/guides/releases) 
-
-```gradle
- dependencies {
-    compile 'com.github.vishal259:EasyLocation:1.0'
-    compile "com.google.android.gms:play-services-location:x.x.x"
- }
-```
-
-Extend your `Activity` from `EasyLocationAppCompatActivity` or `EasyLocationActivity`:
+Extend your `Activity` from `DroidLocationAppCompatActivity` or `DroidLocationActivity`:
 
 *Create location request according to your needs*
 
@@ -47,9 +21,9 @@ LocationRequest locationRequest = new LocationRequest()
         .setInterval(5000)
         .setFastestInterval(5000);
 ```                        
-*Create EasyLocation request, and set locationRequest created*
+*Create DroidLocation request, and set locationRequest created*
 ```java
-EasyLocationRequest easyLocationRequest = new EasyLocationRequestBuilder()
+DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
         .setLocationRequest(locationRequest)
         .setFallBackToLastLocationTime(3000)
         .build();
@@ -57,11 +31,11 @@ EasyLocationRequest easyLocationRequest = new EasyLocationRequestBuilder()
 ```
 **Request Single location update like this**
 ```java
-requestSingleLocationFix(easyLocationRequest);
+requestSingleLocationFix(droidLocationRequest);
 ```
 **Or Request Multiple location updates like this**
 ```java
-requestLocationUpdates(easyLocationRequest);
+requestLocationUpdates(droidLocationRequest);
 ```
 
 **You're good to go!**, You will get below callbacks now in your activity
@@ -90,9 +64,9 @@ requestLocationUpdates(easyLocationRequest);
 
 **Additional Options**
 
-Specify what messages you want to show to user using *EasyLocationRequestBuilder*
+Specify what messages you want to show to user using *DroidLocationRequestBuilder*
 ```java
-EasyLocationRequest easyLocationRequest = new EasyLocationRequestBuilder()
+DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
 .setLocationRequest(locationRequest)
 .setLocationPermissionDialogTitle(getString(R.string.location_permission_dialog_title))
 .setLocationPermissionDialogMessage(getString(R.string.location_permission_dialog_message))
@@ -105,9 +79,41 @@ EasyLocationRequest easyLocationRequest = new EasyLocationRequestBuilder()
 .build();
 ```
 
+
+
+# TODO (Add library to jcenter)
+
+## TODO (Make library available througle gradle distribution)
+
+In your `build.gradle`:
+
+Add the following maven{} line to your **PROJECT** build.gradle file
+
+```
+allprojects {
+		repositories {
+			...
+			maven { url "https://jitpack.io" }   // add this line
+		}
+	}
+```
+
+**com.google.android.gms:play-services-location** dependency also needs to be added like this
+
+**x.x.x** can be replaced with google play service version your app is using [versions information available here](https://developers.google.com/android/guides/releases) 
+
+```gradle
+ dependencies {
+    compile 'ax.synt.droidlocation:DroidLocation:1.0'
+    compile "com.google.android.gms:play-services-location:x.x.x"
+ }
+```
+
+
+
 ## Library License
 
-    Copyright 2016 Vishal Sojitra
+    Copyright 2019 Job Getabu
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
