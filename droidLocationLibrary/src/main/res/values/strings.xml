@@ -4,4 +4,8 @@
     <string name="location_permission_dialog_message">Enable Location permission now?</string>
     <string name="location_services_off">Location services OFF</string>
     <string name="open_location_settings">Enable location services now?</string>
+    <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+    <string name="service_not_available">No geocoder available</string>
+    <string name="address_found">address found</string>
+    <string name="no_address_found">No location data provided</string>
 </resources>
