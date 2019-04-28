@@ -59,8 +59,8 @@ public class MainActivity extends DroidLocationAppCompatActivity implements View
     @Override
     public void onLocationReceived(Location location) {
         showToast(location.getProvider() + "," + location.getLatitude() + "," + location.getLongitude());
-        addresstext.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),false,false));
-        addresstextfull.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),true,true));
+        //addresstext.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),false,false));
+        //addresstextfull.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),true,true));
 
         requestAddressServices(location);
     }
