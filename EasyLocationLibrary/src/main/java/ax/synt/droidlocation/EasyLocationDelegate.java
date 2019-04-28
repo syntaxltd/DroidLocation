@@ -186,7 +186,12 @@ class EasyLocationDelegate {
                     case LocationSettingsStatusCodes.SUCCESS:
                         // All location settings are satisfied. The client can initialize location
                         // requests here.
-                        easyLocationListener.onLocationProviderEnabled();
+
+                        if (isLocationEnabled()) {
+                            requestLocation(mLocationRequest, mLocationFetchMode);
+                            easyLocationListener.onLocationProviderEnabled();
+                        } else
+                            easyLocationListener.onLocationProviderDisabled();
 
 
                         break;
@@ -203,7 +208,8 @@ class EasyLocationDelegate {
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        easyLocationListener.onLocationProviderDisabled();
+                        //easyLocationListener.onLocationProviderDisabled();
+
                         // Location settings are not satisfied. However, we have no way to fix the
                         // settings so we won't show the dialog.
                         break;
