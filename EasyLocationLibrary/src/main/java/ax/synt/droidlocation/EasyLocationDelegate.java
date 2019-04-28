@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,8 +20,16 @@ import android.text.TextUtils;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
-import com.vishalsojitra.easylocation.R;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 class EasyLocationDelegate {
     private static final int PERMISSIONS_REQUEST = 100;
@@ -79,7 +88,7 @@ class EasyLocationDelegate {
 
     private void startLocationBGService(LocationRequest locationRequest, long fallBackToLastLocationTime) {
         if (!isLocationEnabled())
-            showLocationServicesRequireDialog();
+            showLocationSettingDialog(-1);
         else {
             Intent intent = new Intent(activity, LocationBgService.class);
             intent.setAction(AppConstants.ACTION_LOCATION_FETCH_START);
@@ -117,6 +126,8 @@ class EasyLocationDelegate {
                 }).create().show();
     }
 
+    @Deprecated
+    // warning: Use @
     private void showLocationServicesRequireDialog() {
         String title = TextUtils.isEmpty(easyLocationRequest.locationSettingsDialogTitle) ? activity.getString(R.string.location_services_off) : easyLocationRequest.locationSettingsDialogTitle;
         String message = TextUtils.isEmpty(easyLocationRequest.locationSettingsDialogMessage) ? activity.getString(R.string.open_location_settings) : easyLocationRequest.locationSettingsDialogMessage;
@@ -139,6 +150,66 @@ class EasyLocationDelegate {
                     }
                 })
                 .create().show();
+    }
+
+    /*
+    * @param {requestcode}
+    * use -1 if no requestcode is available
+    * */
+    public void showLocationSettingDialog(int requestcode) {
+
+        requestcode = (requestcode == -1) ? ENABLE_LOCATION_SERVICES_REQUEST : requestcode;
+
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(activity)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);//Setting priotity of Location request to high
+        locationRequest.setInterval(30 * 1000);
+        locationRequest.setFastestInterval(5 * 1000);//5 sec Time interval for location update
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(false); //this is the key ingredient to show dialog always when GPS is off
+
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+
+        final int finalRequestcode = requestcode;
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                final LocationSettingsStates state = result.getLocationSettingsStates();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        // All location settings are satisfied. The client can initialize location
+                        // requests here.
+                        easyLocationListener.onLocationProviderEnabled();
+
+
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Location settings are not satisfied. But could be fixed by showing the user
+                        // a dialog.
+                        try {
+                            // Show the dialog by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            status.startResolutionForResult(activity, finalRequestcode);
+                        } catch (IntentSender.SendIntentException e) {
+                            e.printStackTrace();
+                            // Ignore the error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        easyLocationListener.onLocationProviderDisabled();
+                        // Location settings are not satisfied. However, we have no way to fix the
+                        // settings so we won't show the dialog.
+                        break;
+                }
+            }
+        });
     }
 
     private void requestPermission() {
@@ -192,7 +263,7 @@ class EasyLocationDelegate {
         registerLocationBroadcastReceiver();
     }
 
-    void onActivityResult(int requestCode) {
+  /*  void onActivityResult(int requestCode) {
         switch (requestCode) {
             case ENABLE_LOCATION_SERVICES_REQUEST:
                 if (isLocationEnabled()) {
@@ -202,7 +273,7 @@ class EasyLocationDelegate {
                     easyLocationListener.onLocationProviderDisabled();
                 break;
         }
-    }
+    }*/
 
     void onRequestPermissionsResult(int requestCode, int[] grantResults) {
         switch (requestCode) {

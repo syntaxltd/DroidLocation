@@ -7,11 +7,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
-import com.vishalsojitra.easylocation.demo.R;
 
 import ax.synt.droidlocation.EasyLocationAppCompatActivity;
 import ax.synt.droidlocation.EasyLocationRequest;
 import ax.synt.droidlocation.EasyLocationRequestBuilder;
+
 
 public class MainActivity extends EasyLocationAppCompatActivity implements View.OnClickListener {
 

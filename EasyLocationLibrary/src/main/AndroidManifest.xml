@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vishalsojitra.easylocation">
+    package="ax.synt.droidlocation">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application android:allowBackup="true" android:label="@string/app_name"
         android:supportsRtl="true">
-    <service android:name="com.vishalsojitra.easylocation.ax.vishalsojitra.easylocation.LocationBgService"
+    <service android:name=".LocationBgService"
         android:exported="false"
         />
     </application>

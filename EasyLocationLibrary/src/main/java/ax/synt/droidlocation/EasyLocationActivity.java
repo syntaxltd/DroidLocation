@@ -24,7 +24,7 @@ public abstract class EasyLocationActivity extends Activity implements EasyLocat
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        easyLocationDelegate.onActivityResult(requestCode);
+        easyLocationDelegate.showLocationSettingDialog(requestCode);
     }
 
     @Override
