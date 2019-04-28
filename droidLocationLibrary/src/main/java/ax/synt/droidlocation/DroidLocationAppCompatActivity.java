@@ -56,10 +56,16 @@ public abstract class DroidLocationAppCompatActivity extends AppCompatActivity i
         droidLocationDelegate.requestSingleLocationFix(droidLocationRequest);
     }
 
+    protected void requestAddressServices(Location location){
+        droidLocationDelegate.startIntentService(location);
+    }
+
     protected void stopLocationUpdates() {
         droidLocationDelegate.stopLocationUpdates();
     }
 
+    @Deprecated
+    // warning: use the one for intent service
     public static String getAddress(Context context, Double latitude, Double longitude, boolean country, boolean fullAddress) {
         String add = "";
         Geocoder geoCoder = new Geocoder(((Activity) context).getBaseContext(), Locale.getDefault());
@@ -82,4 +88,5 @@ public abstract class DroidLocationAppCompatActivity extends AppCompatActivity i
         }
         return add.replaceAll(",null", "");
     }
+
 }

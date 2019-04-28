@@ -24,10 +24,10 @@ public class FetchAddressIntentService extends IntentService {
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
-     * @param name Used to name the worker thread, important only for debugging.
+     * //@param name Used to name the worker thread, important only for debugging.
      */
-    public FetchAddressIntentService(String name) {
-        super(name);
+    public FetchAddressIntentService() {
+        super("FetchAddressIntentService");
     }
 
     // ...
@@ -39,12 +39,20 @@ public class FetchAddressIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
         if (intent == null) {
             return;
         }
         String errorMessage = "";
+
+        receiver = intent.getParcelableExtra(DroidConstants.RECEIVER);
+
+        // Check if receiver was properly registered.
+        if (receiver == null) {
+            Log.wtf(TAG, "No receiver received. There is nowhere to send the results.");
+            return;
+        }
+
 
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(
@@ -52,9 +60,21 @@ public class FetchAddressIntentService extends IntentService {
 
         // ...
 
+        // Determine whether a Geocoder is available.
+        if (!Geocoder.isPresent()) {
+            Log.wtf(TAG,getString(R.string.no_geocoder_available));
+            return;
+        }
+
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
         List<Address> addresses = null;
 
         try {
+            Log.d(TAG,"lat"+ location.getLatitude()+"--------- lon"+
+                    location.getLongitude());
+
             addresses = geocoder.getFromLocation(
                     location.getLatitude(),
                     location.getLongitude(),
@@ -86,6 +106,17 @@ public class FetchAddressIntentService extends IntentService {
 
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
+            // Fetch the address lines using {@code getAddressLine},
+            // join them, and send them to the thread. The {@link android.location.address}
+            // class provides other options for fetching address details that you may prefer
+
+            // to use. Here are some examples:
+            // getLocality() ("Mountain View", for example)
+            // getAdminArea() ("CA", for example)
+            // getPostalCode() ("94043", for example)
+            // getCountryCode() ("US", for example)
+            // getCountryName() ("United States", for example)
+
             for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
                 addressFragments.add(address.getAddressLine(i));
             }

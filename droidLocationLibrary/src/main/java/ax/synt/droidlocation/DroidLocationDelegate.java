@@ -11,12 +11,16 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -45,11 +49,14 @@ class DroidLocationDelegate {
     private LocationRequest mLocationRequest;
     private GoogleApiAvailability googleApiAvailability;
     private DroidLocationRequest droidLocationRequest;
+    private AddressResultReceiver resultReceiver;
 
     DroidLocationDelegate(Activity activity, DroidLocationListener droidLocationListener) {
         this.activity = activity;
         this.droidLocationListener = droidLocationListener;
         locationReceiver = new LocationBroadcastReceiver(droidLocationListener);
+
+        resultReceiver = new AddressResultReceiver(new Handler());
     }
 
 
@@ -311,4 +318,41 @@ class DroidLocationDelegate {
         isProperRequest(droidLocationRequest);
         requestLocation(droidLocationRequest.locationRequest, AppConstants.SINGLE_FIX);
     }
+
+
+    void startIntentService(Location lastLocation) {
+        Intent intent = new Intent(activity, FetchAddressIntentService.class);
+        intent.putExtra(DroidConstants.RECEIVER, resultReceiver);
+        intent.putExtra(DroidConstants.LOCATION_DATA_EXTRA, lastLocation);
+        activity.startService(intent);
+    }
+
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            if (resultData == null) {
+                return;
+            }
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            String addressOutput = resultData.getString(DroidConstants.RESULT_DATA_KEY);
+            if (addressOutput == null) {
+                addressOutput = "";
+            }
+            //displayAddressOutput();
+
+            // Show a toast message if an address was found.
+            if (resultCode == DroidConstants.SUCCESS_RESULT) {
+                Log.d("address",activity.getString(R.string.address_found));
+                droidLocationListener.onLocationAddressReceived(addressOutput);
+            }
+        }
+    }
+
 }

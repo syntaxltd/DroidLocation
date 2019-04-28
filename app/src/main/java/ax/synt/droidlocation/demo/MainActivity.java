@@ -61,6 +61,8 @@ public class MainActivity extends DroidLocationAppCompatActivity implements View
         showToast(location.getProvider() + "," + location.getLatitude() + "," + location.getLongitude());
         addresstext.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),false,false));
         addresstextfull.setText(DroidLocationAppCompatActivity.getAddress(this,location.getLatitude(),location.getLongitude(),true,true));
+
+        requestAddressServices(location);
     }
 
     @Override
@@ -71,6 +73,12 @@ public class MainActivity extends DroidLocationAppCompatActivity implements View
     @Override
     public void onLocationProviderDisabled() {
         showToast("Location services are still Off");
+    }
+
+    @Override
+    public void onLocationAddressReceived(String fullAddress) {
+        showToast("Address => "+fullAddress);
+        addresstextfull.setText(fullAddress);
     }
 
     @Override

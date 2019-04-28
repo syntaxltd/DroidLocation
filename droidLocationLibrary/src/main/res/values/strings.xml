@@ -8,4 +8,5 @@
     <string name="service_not_available">No geocoder available</string>
     <string name="address_found">address found</string>
     <string name="no_address_found">No location data provided</string>
+    <string name="no_geocoder_available">No geocoder available</string>
 </resources>
