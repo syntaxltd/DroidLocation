@@ -108,10 +108,10 @@ allprojects {
     implementation 'com.github.JobGetabu:DroidLocation:v1.0'
     implementation "com.google.android.gms:play-services-location:x.x.x"
  }
-
+```
 
  ## for androidX
- ```gradle
+```gradle
   dependencies {
      implementation 'com.github.JobGetabu:DroidLocation:v2.0.0'
      implementation "com.google.android.gms:play-services-location:x.x.x"
