@@ -1,6 +1,39 @@
 apply plugin: 'com.android.library'
 
-//noinspection GroovyMissingReturnStatement
+
+ext {
+    bintrayRepo = 'droidlocation'
+    bintrayName = 'droidlocationlibrary'
+
+    publishedGroupId = 'ax.synt'
+    libraryName = 'DroidLocation'
+    artifact = 'droidlocation'
+
+    libraryDescription = 'Getting location updates requires lots of boilerplate code in Android, You need to take care of\n' +
+            '\n' +
+            'Google Play services availability Check, Update Google play Service Dialog\n' +
+            'Creation of GoogleApiClient and its callbacks connected,disconnected etc.\n' +
+            'Stopping and releasing resources for location updates\n' +
+            'Handling Location permission scenarios\n' +
+            'Checking Location services are On or Off\n' +
+            'Getting last known location is not so easy either\n' +
+            'Fallback to last known location if not getting location after certain duration\n' +
+            'DroidLocation does all this stuff in background, so that you can concentrate on your business logic than handling all above'
+
+    siteUrl = 'https://github.com/JobGetabu/DroidLocation'
+    gitUrl = 'https://github.com/JobGetabu/DroidLocation.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'JobGetabu'
+    developerName = 'Job Getabu'
+    developerEmail = 'getabujob@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 28
 
@@ -24,3 +57,6 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:28.0.0'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
