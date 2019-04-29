@@ -83,7 +83,7 @@ DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
 
 # TODO (Add library to jcenter)
 
-## TODO (Make library available througle gradle distribution)
+# Get started 
 
 In your `build.gradle`:
 
@@ -104,8 +104,8 @@ allprojects {
 
 ```gradle
  dependencies {
-    compile 'ax.synt.droidlocation:DroidLocation:1.0'
-    compile "com.google.android.gms:play-services-location:x.x.x"
+    implementation 'com.github.JobGetabu:DroidLocation:v1.0'
+    implementation "com.google.android.gms:play-services-location:x.x.x"
  }
 ```
 

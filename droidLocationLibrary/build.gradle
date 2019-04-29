@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 
 
 ext {
-    bintrayRepo = 'droidlocation'
-    bintrayName = 'droidlocationlibrary'
+    bintrayRepo = 'maven'
+    bintrayName = 'droidlocation'
 
     publishedGroupId = 'ax.synt'
     libraryName = 'DroidLocation'
@@ -20,8 +20,8 @@ ext {
             'Fallback to last known location if not getting location after certain duration\n' +
             'DroidLocation does all this stuff in background, so that you can concentrate on your business logic than handling all above'
 
-    siteUrl = 'https://github.com/JobGetabu/DroidLocation'
-    gitUrl = 'https://github.com/JobGetabu/DroidLocation.git'
+    siteUrl = 'https://github.com/syntaxltd/DroidLocation'
+    gitUrl = 'https://github.com/syntaxltd/DroidLocation.git'
 
     libraryVersion = '1.0.0'
 
