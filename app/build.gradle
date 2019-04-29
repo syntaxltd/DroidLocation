@@ -8,7 +8,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "2.0"
     }
     buildTypes {
         release {
@@ -20,7 +20,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'androidx.appcompat:appcompat:1.0.0'
+    compile 'androidx.appcompat:appcompat:1.0.2'
     compile project(':droidLocationLibrary')
     compile 'com.google.android.gms:play-services-location:16.0.0'
 }
