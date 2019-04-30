@@ -87,7 +87,6 @@ DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
 
 
 
-# TODO (Add library to jcenter)
 
 # Get started 
 
@@ -124,6 +123,11 @@ allprojects {
   }
 ```
 
+## TODO 
+[x] migrate to androidX
+[] Add library to jcenter
+[] Add kotlin docs
+[] Creating geofences
 
 
 ## Library License
