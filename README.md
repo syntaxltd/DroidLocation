@@ -51,6 +51,12 @@ requestLocationUpdates(droidLocationRequest);
 
     @Override
     public void onLocationReceived(Location location) {
+        requestAddressServices(location)
+    }
+
+    @Override
+    public void onLocationAddressReceived(String fullAddress) {
+         Log.d(TAG, fullAddress)
     }
 
     @Override
