@@ -124,6 +124,7 @@ allprojects {
 ```
 
 ## TODO 
+
 [x] migrate to androidX
 [] Add library to jcenter
 [] Add kotlin docs
