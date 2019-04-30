@@ -125,10 +125,11 @@ allprojects {
 
 ## TODO 
 
+- [ ] Add library to jcenter
 - [x] migrate to androidX
-- [] Add library to jcenter
-- [] Add kotlin docs
-- [] Creating geofences
+- [ ] Add kotlin docs
+- [ ] Creating geofences
+
 
 
 ## Library License
