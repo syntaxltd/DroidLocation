@@ -1,15 +1,17 @@
 package ax.synt.droidlocation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 
-public abstract class DroidLocationActivity extends AppCompatActivity implements DroidLocationListener {
+public abstract class DroidLocationActivity extends Activity implements DroidLocationListener {
     private DroidLocationDelegate droidLocationDelegate;
+
+    private static final int ENABLE_LOCATION_SERVICES_REQUEST = 101;
 
     protected Location getLastKnownLocation() {
         return droidLocationDelegate.getLastKnownLocation();
@@ -41,12 +43,12 @@ public abstract class DroidLocationActivity extends AppCompatActivity implements
     }
 
     protected void requestLocationUpdates(DroidLocationRequest droidLocationRequest) {
-        droidLocationDelegate.requestLocationUpdates(droidLocationRequest);
+        droidLocationDelegate.requestLocationUpdates(droidLocationRequest, ENABLE_LOCATION_SERVICES_REQUEST);
     }
 
 
     protected void requestSingleLocationFix(DroidLocationRequest droidLocationRequest) {
-        droidLocationDelegate.requestSingleLocationFix(droidLocationRequest);
+        droidLocationDelegate.requestSingleLocationFix(droidLocationRequest, ENABLE_LOCATION_SERVICES_REQUEST);
     }
 
     protected void stopLocationUpdates() {
