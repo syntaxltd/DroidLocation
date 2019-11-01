@@ -1,4 +1,4 @@
-# DroidLocation
+# DroidLocation  [![](https://jitpack.io/v/JobGetabu/DroidLocation.svg)](https://jitpack.io/#JobGetabu/DroidLocation)
 
 Getting location updates requires lots of boilerplate code in Android, You need to take care of
 - Google Play services availability Check, Update Google play Service Dialog
