@@ -15,12 +15,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AlertDialog;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -235,8 +236,9 @@ class DroidLocationDelegate {
             mLocationFetchMode = locationMode;
             mLocationRequest = locationRequest;
             checkForPermissionAndRequestLocation(locationRequest);
-        } else
+        } else {
             showGooglePlayServicesErrorDialog();
+        }
     }
 
     private void checkForPermissionAndRequestLocation(LocationRequest locationRequest) {

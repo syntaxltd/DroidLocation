@@ -1,13 +1,14 @@
 package ax.synt.droidlocation;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 
-public abstract class DroidLocationActivity extends Activity implements DroidLocationListener {
+public abstract class DroidLocationActivity extends AppCompatActivity implements DroidLocationListener {
     private DroidLocationDelegate droidLocationDelegate;
 
     protected Location getLastKnownLocation() {
