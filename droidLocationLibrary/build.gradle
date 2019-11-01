@@ -23,7 +23,7 @@ ext {
     siteUrl = 'https://github.com/syntaxltd/DroidLocation'
     gitUrl = 'https://github.com/syntaxltd/DroidLocation.git'
 
-    libraryVersion = '2.0.0'
+    libraryVersion = '3.0.0'
 
     developerId = 'JobGetabu'
     developerName = 'Job Getabu'
@@ -55,7 +55,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "com.google.android.gms:play-services-location:16.0.0"
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

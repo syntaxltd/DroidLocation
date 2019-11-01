@@ -17,7 +17,6 @@ import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
