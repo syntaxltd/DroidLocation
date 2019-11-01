@@ -52,10 +52,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided "com.google.android.gms:play-services-location:16.0.0"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly "com.google.android.gms:play-services-location:16.0.0"
 
-    compile 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
