@@ -118,7 +118,7 @@ allprojects {
  ## for androidX
 ```gradle
   dependencies {
-     implementation 'com.github.JobGetabu:DroidLocation:v2.0.0'
+     implementation 'com.github.JobGetabu:DroidLocation:v3.0.0'
      implementation "com.google.android.gms:play-services-location:x.x.x"
   }
 ```
