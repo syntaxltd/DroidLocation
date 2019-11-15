@@ -118,7 +118,7 @@ allprojects {
  ## for androidX
 ```gradle
   dependencies {
-     implementation 'com.github.JobGetabu:DroidLocation:v2.0.0'
+     implementation 'com.github.JobGetabu:DroidLocation:v3.0.0'
      implementation "com.google.android.gms:play-services-location:x.x.x"
   }
 ```
@@ -130,7 +130,9 @@ allprojects {
 - [ ] Add kotlin docs
 - [ ] Creating geofences
 
+## Stargazers over time
 
+[![Stargazers over time](https://starchart.cc/syntaxltd/DroidLocation.svg)](https://starchart.cc/syntaxltd/DroidLocation)
 
 ## Library License
 
