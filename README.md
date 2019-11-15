@@ -130,7 +130,9 @@ allprojects {
 - [ ] Add kotlin docs
 - [ ] Creating geofences
 
+## Stargazers over time
 
+[![Stargazers over time](https://starchart.cc/syntaxltd/DroidLocation.svg)](https://starchart.cc/syntaxltd/DroidLocation)
 
 ## Library License
 
