@@ -68,22 +68,8 @@ requestLocationUpdates(droidLocationRequest);
     }
 ```
 
-**Additional Options**
-
-Specify what messages you want to show to user using *DroidLocationRequestBuilder*
-```java
-DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
-.setLocationRequest(locationRequest)
-.setLocationPermissionDialogTitle(getString(R.string.location_permission_dialog_title))
-.setLocationPermissionDialogMessage(getString(R.string.location_permission_dialog_message))
-.setLocationPermissionDialogNegativeButtonText(getString(R.string.not_now))
-.setLocationPermissionDialogPositiveButtonText(getString(R.string.yes))
-.setLocationSettingsDialogTitle(getString(R.string.location_services_off))
-.setLocationSettingsDialogMessage(getString(R.string.open_location_settings))
-.setLocationSettingsDialogNegativeButtonText(getString(R.string.not_now))
-.setLocationSettingsDialogPositiveButtonText(getString(R.string.yes))
-.build();
-```
+**preview**                                                
+<img src="https://user-images.githubusercontent.com/22516895/76748820-79840900-678c-11ea-9bf1-5aab769a369e.gif" width="300">
 
 
 
