@@ -1,4 +1,4 @@
-# DroidLocation
+# DroidLocation  [![](https://jitpack.io/v/JobGetabu/DroidLocation.svg)](https://jitpack.io/#JobGetabu/DroidLocation)
 
 Getting location updates requires lots of boilerplate code in Android, You need to take care of
 - Google Play services availability Check, Update Google play Service Dialog
@@ -68,22 +68,8 @@ requestLocationUpdates(droidLocationRequest);
     }
 ```
 
-**Additional Options**
-
-Specify what messages you want to show to user using *DroidLocationRequestBuilder*
-```java
-DroidLocationRequest droidLocationRequest = new DroidLocationRequestBuilder()
-.setLocationRequest(locationRequest)
-.setLocationPermissionDialogTitle(getString(R.string.location_permission_dialog_title))
-.setLocationPermissionDialogMessage(getString(R.string.location_permission_dialog_message))
-.setLocationPermissionDialogNegativeButtonText(getString(R.string.not_now))
-.setLocationPermissionDialogPositiveButtonText(getString(R.string.yes))
-.setLocationSettingsDialogTitle(getString(R.string.location_services_off))
-.setLocationSettingsDialogMessage(getString(R.string.open_location_settings))
-.setLocationSettingsDialogNegativeButtonText(getString(R.string.not_now))
-.setLocationSettingsDialogPositiveButtonText(getString(R.string.yes))
-.build();
-```
+**preview**                                                
+<img src="https://user-images.githubusercontent.com/22516895/76748820-79840900-678c-11ea-9bf1-5aab769a369e.gif" width="300">
 
 
 
@@ -118,7 +104,7 @@ allprojects {
  ## for androidX
 ```gradle
   dependencies {
-     implementation 'com.github.JobGetabu:DroidLocation:v2.0.0'
+     implementation 'com.github.JobGetabu:DroidLocation:v3.0.0'
      implementation "com.google.android.gms:play-services-location:x.x.x"
   }
 ```
@@ -129,7 +115,9 @@ allprojects {
 - [ ] Add kotlin docs
 - [ ] Creating geofences
 
+## Stargazers over time
 
+[![Stargazers over time](https://starchart.cc/syntaxltd/DroidLocation.svg)](https://starchart.cc/syntaxltd/DroidLocation)
 
 ## Library License
 

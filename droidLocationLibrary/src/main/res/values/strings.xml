@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EasyLocation</string>
+    <string name="app_name">Droid Location</string>
     <string name="location_permission_dialog_title">Location permission needed</string>
     <string name="location_permission_dialog_message">Enable Location permission now?</string>
     <string name="location_services_off">Location services OFF</string>

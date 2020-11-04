@@ -15,12 +15,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AlertDialog;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -34,6 +34,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+
+import static ax.synt.droidlocation.DroidConstants.DENIED;
+import static ax.synt.droidlocation.DroidConstants.GRANTED;
+import static ax.synt.droidlocation.DroidConstants.REPEAT;
 
 class DroidLocationDelegate {
     private static final int PERMISSIONS_REQUEST = 100;
@@ -73,6 +77,7 @@ class DroidLocationDelegate {
         return mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
+    @Deprecated
     private void openLocationSettings() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         activity.startActivityForResult(intent, ENABLE_LOCATION_SERVICES_REQUEST);
@@ -93,10 +98,10 @@ class DroidLocationDelegate {
         this.droidLocationRequest = droidLocationRequest;
     }
 
-    private void startLocationBGService(LocationRequest locationRequest, long fallBackToLastLocationTime) {
-        if (!isLocationEnabled())
-            showLocationSettingDialog(-1);
-        else {
+    private void startLocationBGService(LocationRequest locationRequest, long fallBackToLastLocationTime, int requestCode) {
+        if (!isLocationEnabled()) {
+            showLocationSettingDialog(requestCode);
+        } else {
             Intent intent = new Intent(activity, LocationBgService.class);
             intent.setAction(AppConstants.ACTION_LOCATION_FETCH_START);
             intent.putExtra(IntentKey.LOCATION_REQUEST, locationRequest);
@@ -106,11 +111,29 @@ class DroidLocationDelegate {
         }
     }
 
-    private boolean hasLocationPermission() {
-        return ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    private void startLocationBGService(LocationRequest locationRequest, long fallBackToLastLocationTime) {
+        Intent intent = new Intent(activity, LocationBgService.class);
+        intent.setAction(AppConstants.ACTION_LOCATION_FETCH_START);
+        intent.putExtra(IntentKey.LOCATION_REQUEST, locationRequest);
+        intent.putExtra(IntentKey.LOCATION_FETCH_MODE, mLocationFetchMode);
+        intent.putExtra(IntentKey.FALLBACK_TO_LAST_LOCATION_TIME, fallBackToLastLocationTime);
+        activity.startService(intent);
+
     }
 
-    private void showPermissionRequireDialog() {
+
+    private String hasLocationPermission() {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return GRANTED;
+        }
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            return DENIED;
+        }
+
+        return REPEAT;
+    }
+
+    private void showPermissionRequireDialog(final int requestCode) {
         String title = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogTitle) ? activity.getString(R.string.location_permission_dialog_title) : droidLocationRequest.locationPermissionDialogTitle;
         String message = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogMessage) ? activity.getString(R.string.location_permission_dialog_message) : droidLocationRequest.locationPermissionDialogMessage;
         String negativeButtonTitle = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : droidLocationRequest.locationPermissionDialogNegativeButtonText;
@@ -128,16 +151,14 @@ class DroidLocationDelegate {
                 .setPositiveButton(positiveButtonTitle, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        requestPermission();
+                        requestPermission(requestCode);
                     }
                 }).create().show();
     }
 
     @Deprecated
-    // warning: Use @
+    // warning: Use @showLocationSettingDialog(int requestcode)
     private void showLocationServicesRequireDialog() {
-        if(droidLocationRequest == null) return;
-
         String title = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogTitle) ? activity.getString(R.string.location_services_off) : droidLocationRequest.locationSettingsDialogTitle;
         String message = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogMessage) ? activity.getString(R.string.open_location_settings) : droidLocationRequest.locationSettingsDialogMessage;
         String negativeButtonText = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : droidLocationRequest.locationSettingsDialogNegativeButtonText;
@@ -161,13 +182,26 @@ class DroidLocationDelegate {
                 .create().show();
     }
 
-    /*
-    * @param {requestcode}
-    * use -1 if no requestcode is available
-    * */
-    public void showLocationSettingDialog(int requestcode) {
+    void doWeStartLocationService(int resultCode) {
+        Log.d("DroidLocation", "doWeStartLocationService: " + resultCode);
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                startLocationBGService(mLocationRequest, droidLocationRequest.fallBackToLastLocationTime);
+                droidLocationListener.onLocationProviderEnabled();
+                break;
+            case Activity.RESULT_CANCELED:
+                droidLocationListener.onLocationProviderDisabled();
+                break;
+        }
+    }
 
-        requestcode = (requestcode == -1) ? ENABLE_LOCATION_SERVICES_REQUEST : requestcode;
+    /*
+     * @param {requestcode}
+     * use -1 if no requestcode is available
+     * */
+    void showLocationSettingDialog(int requestcode) {
+
+        //requestcode = (requestcode == -1) ? ENABLE_LOCATION_SERVICES_REQUEST : requestcode;
 
         GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(activity)
                 .addApi(LocationServices.API)
@@ -191,6 +225,7 @@ class DroidLocationDelegate {
             public void onResult(LocationSettingsResult result) {
                 final Status status = result.getStatus();
                 final LocationSettingsStates state = result.getLocationSettingsStates();
+                Log.d("DroidLocation", "onResult: " + status.getStatusMessage());
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         // All location settings are satisfied. The client can initialize location
@@ -202,7 +237,6 @@ class DroidLocationDelegate {
                         } else
                             droidLocationListener.onLocationProviderDisabled();
 
-
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         // Location settings are not satisfied. But could be fixed by showing the user
@@ -211,10 +245,12 @@ class DroidLocationDelegate {
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
                             status.startResolutionForResult(activity, finalRequestcode);
+
                         } catch (IntentSender.SendIntentException e) {
                             e.printStackTrace();
                             // Ignore the error.
                         }
+
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         //droidLocationListener.onLocationProviderDisabled();
@@ -227,29 +263,37 @@ class DroidLocationDelegate {
         });
     }
 
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST);
+    private void requestPermission(int requestCode) {
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
     }
 
 
-    private void requestLocation(LocationRequest locationRequest, int locationMode) {
+    private void requestLocation(LocationRequest locationRequest, int locationMode, int requestCode) {
         if (isGoogleServiceAvailable()) {
             mLocationFetchMode = locationMode;
             mLocationRequest = locationRequest;
-            checkForPermissionAndRequestLocation(locationRequest);
-        } else
+            checkForPermissionAndRequestLocation(locationRequest, requestCode);
+        } else {
             showGooglePlayServicesErrorDialog();
+        }
     }
 
-    private void checkForPermissionAndRequestLocation(LocationRequest locationRequest) {
-        if (!hasLocationPermission()) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, android.Manifest.permission.ACCESS_FINE_LOCATION))
-                showPermissionRequireDialog();
-            else
-                requestPermission();
-        } else{
-            if(droidLocationRequest == null) return;
-            startLocationBGService(locationRequest, droidLocationRequest.fallBackToLastLocationTime);
+    private void checkForPermissionAndRequestLocation(LocationRequest locationRequest, int requestCode) {
+        Log.d("DroidLocation", "checkForPermissionAndRequestLocation: hasLocationPermission() =>" + hasLocationPermission());
+
+        switch (hasLocationPermission()) {
+            case GRANTED: {
+                startLocationBGService(locationRequest, droidLocationRequest.fallBackToLastLocationTime, requestCode);
+                break;
+            }
+            case DENIED: {
+                break;
+            }
+            case REPEAT: {
+                requestPermission(requestCode);
+                break;
+            }
+            default:
         }
     }
 
@@ -296,7 +340,7 @@ class DroidLocationDelegate {
         switch (requestCode) {
             case PERMISSIONS_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    requestLocation(mLocationRequest, mLocationFetchMode);
+                    requestLocation(mLocationRequest, mLocationFetchMode, requestCode);
                     droidLocationListener.onLocationPermissionGranted();
                 } else
                     droidLocationListener.onLocationPermissionDenied();
@@ -313,14 +357,14 @@ class DroidLocationDelegate {
         return PreferenceUtil.getInstance(activity).getLastKnownLocation();
     }
 
-    void requestLocationUpdates(DroidLocationRequest droidLocationRequest) {
+    void requestLocationUpdates(DroidLocationRequest droidLocationRequest, int requestCode) {
         isProperRequest(droidLocationRequest);
-        requestLocation(droidLocationRequest.locationRequest, AppConstants.CONTINUOUS_LOCATION_UPDATES);
+        requestLocation(droidLocationRequest.locationRequest, AppConstants.CONTINUOUS_LOCATION_UPDATES, requestCode);
     }
 
-    void requestSingleLocationFix(DroidLocationRequest droidLocationRequest) {
+    void requestSingleLocationFix(DroidLocationRequest droidLocationRequest, int requestCode) {
         isProperRequest(droidLocationRequest);
-        requestLocation(droidLocationRequest.locationRequest, AppConstants.SINGLE_FIX);
+        requestLocation(droidLocationRequest.locationRequest, AppConstants.SINGLE_FIX, requestCode);
     }
 
 
@@ -353,7 +397,7 @@ class DroidLocationDelegate {
 
             // Show a toast message if an address was found.
             if (resultCode == DroidConstants.SUCCESS_RESULT) {
-                Log.d("address",activity.getString(R.string.address_found));
+                Log.d("address", activity.getString(R.string.address_found));
                 droidLocationListener.onLocationAddressReceived(addressOutput);
             }
         }
