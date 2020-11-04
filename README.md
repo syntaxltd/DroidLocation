@@ -93,18 +93,10 @@ allprojects {
 
 **x.x.x** can be replaced with google play service version your app is using [versions information available here](https://developers.google.com/android/guides/releases) 
 
-## for non androidX
-```gradle
- dependencies {
-    implementation 'com.github.JobGetabu:DroidLocation:v1.0'
-    implementation "com.google.android.gms:play-services-location:x.x.x"
- }
-```
-
  ## for androidX
 ```gradle
   dependencies {
-     implementation 'com.github.JobGetabu:DroidLocation:v3.0.0'
+     implementation 'com.github.JobGetabu:DroidLocation:TAG'
      implementation "com.google.android.gms:play-services-location:x.x.x"
   }
 ```

@@ -199,7 +199,7 @@ class DroidLocationDelegate {
      * @param {requestcode}
      * use -1 if no requestcode is available
      * */
-    void showLocationSettingDialog(int requestcode) {
+    void showLocationSettingDialog(final int requestcode) {
 
         //requestcode = (requestcode == -1) ? ENABLE_LOCATION_SERVICES_REQUEST : requestcode;
 
@@ -232,7 +232,7 @@ class DroidLocationDelegate {
                         // requests here.
 
                         if (isLocationEnabled()) {
-                            requestLocation(mLocationRequest, mLocationFetchMode);
+                            requestLocation(mLocationRequest, mLocationFetchMode, requestcode);
                             droidLocationListener.onLocationProviderEnabled();
                         } else
                             droidLocationListener.onLocationProviderDisabled();
@@ -324,7 +324,7 @@ class DroidLocationDelegate {
         registerLocationBroadcastReceiver();
     }
 
-  /*  void onActivityResult(int requestCode) {
+    /* void onActivityResult(int requestCode) {
         switch (requestCode) {
             case ENABLE_LOCATION_SERVICES_REQUEST:
                 if (isLocationEnabled()) {
