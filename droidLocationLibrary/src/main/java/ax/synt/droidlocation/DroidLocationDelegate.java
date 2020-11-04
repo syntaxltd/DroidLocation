@@ -136,6 +136,8 @@ class DroidLocationDelegate {
     @Deprecated
     // warning: Use @
     private void showLocationServicesRequireDialog() {
+        if(droidLocationRequest == null) return;
+
         String title = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogTitle) ? activity.getString(R.string.location_services_off) : droidLocationRequest.locationSettingsDialogTitle;
         String message = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogMessage) ? activity.getString(R.string.open_location_settings) : droidLocationRequest.locationSettingsDialogMessage;
         String negativeButtonText = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : droidLocationRequest.locationSettingsDialogNegativeButtonText;
@@ -245,8 +247,10 @@ class DroidLocationDelegate {
                 showPermissionRequireDialog();
             else
                 requestPermission();
-        } else
+        } else{
+            if(droidLocationRequest == null) return;
             startLocationBGService(locationRequest, droidLocationRequest.fallBackToLastLocationTime);
+        }
     }
 
     private void unregisterLocationBroadcastReceiver() {

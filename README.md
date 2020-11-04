@@ -125,7 +125,6 @@ allprojects {
 
 ## TODO 
 
-- [ ] Add library to jcenter
 - [x] migrate to androidX
 - [ ] Add kotlin docs
 - [ ] Creating geofences
