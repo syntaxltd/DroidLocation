@@ -17,6 +17,7 @@ import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -134,6 +135,8 @@ class DroidLocationDelegate {
     }
 
     private void showPermissionRequireDialog(final int requestCode) {
+        if(droidLocationRequest == null) return;
+
         String title = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogTitle) ? activity.getString(R.string.location_permission_dialog_title) : droidLocationRequest.locationPermissionDialogTitle;
         String message = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogMessage) ? activity.getString(R.string.location_permission_dialog_message) : droidLocationRequest.locationPermissionDialogMessage;
         String negativeButtonTitle = TextUtils.isEmpty(droidLocationRequest.locationPermissionDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : droidLocationRequest.locationPermissionDialogNegativeButtonText;
@@ -159,6 +162,8 @@ class DroidLocationDelegate {
     @Deprecated
     // warning: Use @showLocationSettingDialog(int requestcode)
     private void showLocationServicesRequireDialog() {
+        if(droidLocationRequest == null) return;
+
         String title = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogTitle) ? activity.getString(R.string.location_services_off) : droidLocationRequest.locationSettingsDialogTitle;
         String message = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogMessage) ? activity.getString(R.string.open_location_settings) : droidLocationRequest.locationSettingsDialogMessage;
         String negativeButtonText = TextUtils.isEmpty(droidLocationRequest.locationSettingsDialogNegativeButtonText) ? activity.getString(android.R.string.cancel) : droidLocationRequest.locationSettingsDialogNegativeButtonText;
@@ -184,10 +189,15 @@ class DroidLocationDelegate {
 
     void doWeStartLocationService(int resultCode) {
         Log.d("DroidLocation", "doWeStartLocationService: " + resultCode);
+        if(droidLocationRequest == null) return;
+
         switch (resultCode) {
             case Activity.RESULT_OK:
-                startLocationBGService(mLocationRequest, droidLocationRequest.fallBackToLastLocationTime);
-                droidLocationListener.onLocationProviderEnabled();
+
+                if(droidLocationRequest != null){
+                    startLocationBGService(mLocationRequest, droidLocationRequest.fallBackToLastLocationTime);
+                    droidLocationListener.onLocationProviderEnabled();
+                }
                 break;
             case Activity.RESULT_CANCELED:
                 droidLocationListener.onLocationProviderDisabled();
@@ -200,6 +210,8 @@ class DroidLocationDelegate {
      * use -1 if no requestcode is available
      * */
     void showLocationSettingDialog(final int requestcode) {
+
+        if(droidLocationRequest == null) return;
 
         //requestcode = (requestcode == -1) ? ENABLE_LOCATION_SERVICES_REQUEST : requestcode;
 

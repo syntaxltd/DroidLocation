@@ -7,6 +7,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,7 +28,7 @@ public abstract class DroidLocationAppCompatActivity extends AppCompatActivity i
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        droidLocationDelegate = new DroidLocationDelegate(this,this);
+        droidLocationDelegate = new DroidLocationDelegate(this, this);
         droidLocationDelegate.onCreate();
     }
 
@@ -35,7 +36,9 @@ public abstract class DroidLocationAppCompatActivity extends AppCompatActivity i
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //droidLocationDelegate.showLocationSettingDialog(requestCode);
-        droidLocationDelegate.doWeStartLocationService(resultCode);
+        if (droidLocationDelegate != null) {
+            droidLocationDelegate.doWeStartLocationService(resultCode);
+        }
     }
 
     @Override
@@ -59,7 +62,7 @@ public abstract class DroidLocationAppCompatActivity extends AppCompatActivity i
         droidLocationDelegate.requestSingleLocationFix(droidLocationRequest, ENABLE_LOCATION_SERVICES_REQUEST);
     }
 
-    protected void requestAddressServices(Location location){
+    protected void requestAddressServices(Location location) {
         droidLocationDelegate.startIntentService(location);
     }
 
